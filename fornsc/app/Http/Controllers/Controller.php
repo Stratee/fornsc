@@ -7,6 +7,7 @@ use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Support\Facades\Log;
+use Symfony\Component\HttpFoundation\Request;
 
 class Controller extends BaseController
 {
@@ -14,9 +15,8 @@ class Controller extends BaseController
 
     private $tokenTTL = 3600;
 
-    public function makeCrypt(){
-        $dataCard = '{"pan":"5412751234123452","cvc":"123","cardholder":"Card Holder","expire":"10/23"}';
-        $dataCardArr = json_decode($dataCard, true);
+    public function makeCrypt(Request $request){
+        $dataCardArr = $request->input();
 
         if (isset($dataCardArr['pan']) && $this->isCardNumberValid($dataCardArr['pan']) == false){
             Log::error('Incorrect number');
